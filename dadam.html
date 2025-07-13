@@ -17,18 +17,10 @@
     vertical-align: middle;
     white-space: nowrap;
     text-align: center;
+    font-size: 0.9rem;
   }
   input, select, textarea {
     text-align: center;
-  }
-  .date-col {
-    width: 150px;
-  }
-  .region-col {
-    width: 120px;
-  }
-  .content-col {
-    width: 200px;
   }
   th.resizable {
     position: relative;
@@ -46,12 +38,12 @@
 </head>
 <body>
 <div class="container-fluid mt-2">
-  <h2>📋 데이터베이스 관리 시스템</h2>
+  <h2 class="text-center mb-4">📋 데이터베이스 관리 시스템</h2>
 
-  <div class="d-flex justify-content-between align-items-center my-3">
-    <div>
-      <input type="date" id="searchDate" class="form-control d-inline w-auto" />
-      <select id="searchRegion" class="form-select d-inline w-auto">
+  <div class="row g-2 mb-3">
+    <div class="col-12 col-lg-8 d-flex flex-wrap gap-2">
+      <input type="date" id="searchDate" class="form-control w-auto flex-grow-1" />
+      <select id="searchRegion" class="form-select w-auto flex-grow-1">
         <option value="">지역</option>
         <option>서울</option>
         <option>부산</option>
@@ -72,30 +64,30 @@
         <option>안산</option>
         <option>안양</option>
       </select>
-      <input type="text" id="searchText" placeholder="검색" class="form-control d-inline w-auto" />
-      <button id="searchBtn" class="btn btn-primary">검색</button>
-      <button id="resetBtn" class="btn btn-secondary">초기화</button>
+      <input type="text" id="searchText" placeholder="검색" class="form-control w-auto flex-grow-1" />
+      <button id="searchBtn" class="btn btn-primary flex-shrink-0">검색</button>
+      <button id="resetBtn" class="btn btn-secondary flex-shrink-0">초기화</button>
     </div>
-    <div>
+    <div class="col-12 col-lg-4 d-flex flex-wrap gap-2 justify-content-lg-end mt-2 mt-lg-0">
       <button id="addRow" class="btn btn-success">신규 등록</button>
       <button id="deleteToggle" class="btn btn-danger">삭제</button>
     </div>
   </div>
 
   <div class="table-responsive">
-    <table id="dataTable" class="table table-bordered table-hover w-100">
+    <table id="dataTable" class="table table-bordered table-hover">
       <thead class="table-light">
         <tr>
           <th class="resizable"><span>#</span><div class="resizer"></div></th>
-          <th class="resizable date-col"><span>운영일자</span><div class="resizer"></div></th>
-          <th class="resizable region-col"><span>지역</span><div class="resizer"></div></th>
+          <th class="resizable"><span>운영일자</span><div class="resizer"></div></th>
+          <th class="resizable"><span>지역</span><div class="resizer"></div></th>
           <th class="resizable"><span>업종</span><div class="resizer"></div></th>
           <th class="resizable"><span>오픈예정</span><div class="resizer"></div></th>
           <th class="resizable"><span>좌수</span><div class="resizer"></div></th>
           <th class="resizable"><span>테이블 수</span><div class="resizer"></div></th>
           <th class="resizable"><span>요청 장비</span><div class="resizer"></div></th>
           <th class="resizable"><span>주소</span><div class="resizer"></div></th>
-          <th class="resizable content-col"><span>내용</span><div class="resizer"></div></th>
+          <th class="resizable"><span>내용</span><div class="resizer"></div></th>
           <th class="resizable"><span>연락처</span><div class="resizer"></div></th>
           <th class="resizable"><span>거래</span><div class="resizer"></div></th>
           <th class="resizable"><span>확인</span><div class="resizer"></div></th>
