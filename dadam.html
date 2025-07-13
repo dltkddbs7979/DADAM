@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html lang="ko">
+>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>예약·주문 관리 시스템</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  .container-fluid {
+    padding: 10px;
+  }
   td, th {
     vertical-align: middle;
     white-space: nowrap;
@@ -34,14 +42,14 @@
 </style>
 </head>
 <body>
-<div class="container mt-4">
+<div class="container-fluid mt-2">
   <h2>📋 데이터베이스 관리 시스템</h2>
 
   <div class="d-flex justify-content-between align-items-center my-3">
     <div>
-      <input type="date" class="form-control d-inline w-auto" />
-      <select id="regionFilter" class="form-select d-inline w-auto">
-        <option selected>지역</option>
+      <input type="date" id="searchDate" class="form-control d-inline w-auto" />
+      <select id="searchRegion" class="form-select d-inline w-auto">
+        <option value="">지역</option>
         <option>서울</option>
         <option>부산</option>
         <option>대구</option>
@@ -61,55 +69,56 @@
         <option>안산</option>
         <option>안양</option>
       </select>
-      <input type="text" placeholder="검색" class="form-control d-inline w-auto" />
-      <button class="btn btn-primary">검색</button>
+      <input type="text" id="searchText" placeholder="검색" class="form-control d-inline w-auto" />
+      <button id="searchBtn" class="btn btn-primary">검색</button>
+      <button id="resetBtn" class="btn btn-secondary">초기화</button>
     </div>
     <div>
       <button id="addRow" class="btn btn-success">신규 등록</button>
       <button id="deleteToggle" class="btn btn-danger">삭제</button>
-      <button class="btn btn-outline-primary">엑셀 다운로드</button>
-      <button class="btn btn-outline-secondary">엑셀 업로드</button>
     </div>
   </div>
 
-  <table id="dataTable" class="table table-bordered table-hover">
-    <thead class="table-light">
-      <tr>
-        <th class="resizable"><span>#</span><div class="resizer"></div></th>
-        <th class="resizable date-col"><span>운영일자</span><div class="resizer"></div></th>
-        <th class="resizable region-col"><span>지역</span><div class="resizer"></div></th>
-        <th class="resizable"><span>업종</span><div class="resizer"></div></th>
-        <th class="resizable"><span>오픈예정</span><div class="resizer"></div></th>
-        <th class="resizable"><span>좌수</span><div class="resizer"></div></th>
-        <th class="resizable"><span>테이블 수</span><div class="resizer"></div></th>
-        <th class="resizable"><span>요청 장비</span><div class="resizer"></div></th>
-        <th class="resizable"><span>주소</span><div class="resizer"></div></th>
-        <th class="resizable content-col"><span>내용</span><div class="resizer"></div></th>
-        <th class="resizable"><span>연락처</span><div class="resizer"></div></th>
-        <th class="resizable"><span>거래</span><div class="resizer"></div></th>
-        <th class="resizable"><span>확인</span><div class="resizer"></div></th>
-        <th class="resizable"><span>불발</span><div class="resizer"></div></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>2025-05-01</td>
-        <td>서울</td>
-        <td>카페</td>
-        <td>35</td>
-        <td>12</td>
-        <td>4</td>
-        <td>스피커 3대</td>
-        <td>서울 강남구 역삼동 123</td>
-        <td>-</td>
-        <td>010-1234-5678</td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox"></td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table id="dataTable" class="table table-bordered table-hover w-100">
+      <thead class="table-light">
+        <tr>
+          <th class="resizable"><span>#</span><div class="resizer"></div></th>
+          <th class="resizable date-col"><span>운영일자</span><div class="resizer"></div></th>
+          <th class="resizable region-col"><span>지역</span><div class="resizer"></div></th>
+          <th class="resizable"><span>업종</span><div class="resizer"></div></th>
+          <th class="resizable"><span>오픈예정</span><div class="resizer"></div></th>
+          <th class="resizable"><span>좌수</span><div class="resizer"></div></th>
+          <th class="resizable"><span>테이블 수</span><div class="resizer"></div></th>
+          <th class="resizable"><span>요청 장비</span><div class="resizer"></div></th>
+          <th class="resizable"><span>주소</span><div class="resizer"></div></th>
+          <th class="resizable content-col"><span>내용</span><div class="resizer"></div></th>
+          <th class="resizable"><span>연락처</span><div class="resizer"></div></th>
+          <th class="resizable"><span>거래</span><div class="resizer"></div></th>
+          <th class="resizable"><span>확인</span><div class="resizer"></div></th>
+          <th class="resizable"><span>불발</span><div class="resizer"></div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>2025-05-01</td>
+          <td>서울</td>
+          <td>카페</td>
+          <td>35</td>
+          <td>12</td>
+          <td>4</td>
+          <td>스피커 3대</td>
+          <td>서울 강남구 역삼동 123</td>
+          <td>-</td>
+          <td>010-1234-5678</td>
+          <td><input type="checkbox" checked></td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -192,9 +201,7 @@ document.getElementById("deleteToggle").addEventListener("click", () => {
   if (!deleteMode) updateRowNumbers();
 });
 
-// 초기 번호
 updateRowNumbers();
-
 
 // 열 너비 조절
 document.querySelectorAll("th.resizable").forEach(th => {
@@ -217,6 +224,46 @@ document.querySelectorAll("th.resizable").forEach(th => {
 
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
+  });
+});
+
+// 검색
+document.getElementById("searchBtn").addEventListener("click", () => {
+  const dateVal = document.getElementById("searchDate").value;
+  const regionVal = document.getElementById("searchRegion").value;
+  const textVal = document.getElementById("searchText").value.trim().toLowerCase();
+
+  document.querySelectorAll("#dataTable tbody tr").forEach(row => {
+    let show = true;
+    const tds = row.querySelectorAll("td");
+
+    if (dateVal) {
+      const cellDate = tds[1].querySelector("input")?.value || tds[1].textContent.trim();
+      if (!cellDate.includes(dateVal)) show = false;
+    }
+
+    if (regionVal) {
+      const cellRegion = tds[2].querySelector("select")?.value || tds[2].textContent.trim();
+      if (cellRegion !== regionVal) show = false;
+    }
+
+    if (textVal) {
+      const rowText = row.textContent.toLowerCase();
+      if (!rowText.includes(textVal)) show = false;
+    }
+
+    row.style.display = show ? "" : "none";
+  });
+});
+
+// 초기화
+document.getElementById("resetBtn").addEventListener("click", () => {
+  document.getElementById("searchDate").value = "";
+  document.getElementById("searchRegion").value = "";
+  document.getElementById("searchText").value = "";
+
+  document.querySelectorAll("#dataTable tbody tr").forEach(row => {
+    row.style.display = "";
   });
 });
 </script>
