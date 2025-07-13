@@ -8,19 +8,28 @@
 <style>
   td, th {
     vertical-align: middle;
+    white-space: nowrap;
   }
-  .resize-row {
-    resize: vertical;
-    overflow: auto;
-  }
-  .small-date {
-    width: 100px;
-  }
-  .wide-region {
+  .date-col {
     width: 150px;
   }
-  .wide-content {
+  .region-col {
+    width: 120px;
+  }
+  .content-col {
     width: 200px;
+  }
+  th.resizable {
+    position: relative;
+  }
+  th.resizable .resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 5px;
+    cursor: col-resize;
+    user-select: none;
+    height: 100%;
   }
 </style>
 </head>
@@ -57,6 +66,7 @@
     </div>
     <div>
       <button id="addRow" class="btn btn-success">신규 등록</button>
+      <button id="deleteToggle" class="btn btn-danger">삭제</button>
       <button class="btn btn-outline-primary">엑셀 다운로드</button>
       <button class="btn btn-outline-secondary">엑셀 업로드</button>
     </div>
@@ -65,21 +75,20 @@
   <table id="dataTable" class="table table-bordered table-hover">
     <thead class="table-light">
       <tr>
-        <th>#</th>
-        <th class="small-date">운영일자</th>
-        <th class="wide-region">지역</th>
-        <th>업종</th>
-        <th>오픈예정</th>
-        <th>좌수</th>
-        <th>테이블 수</th>
-        <th>요청 장비</th>
-        <th>주소</th>
-        <th class="wide-content">내용</th>
-        <th>연락처</th>
-        <th>거래</th>
-        <th>확인</th>
-        <th>불발</th>
-        <th>삭제</th>
+        <th class="resizable"><span>#</span><div class="resizer"></div></th>
+        <th class="resizable date-col"><span>운영일자</span><div class="resizer"></div></th>
+        <th class="resizable region-col"><span>지역</span><div class="resizer"></div></th>
+        <th class="resizable"><span>업종</span><div class="resizer"></div></th>
+        <th class="resizable"><span>오픈예정</span><div class="resizer"></div></th>
+        <th class="resizable"><span>좌수</span><div class="resizer"></div></th>
+        <th class="resizable"><span>테이블 수</span><div class="resizer"></div></th>
+        <th class="resizable"><span>요청 장비</span><div class="resizer"></div></th>
+        <th class="resizable"><span>주소</span><div class="resizer"></div></th>
+        <th class="resizable content-col"><span>내용</span><div class="resizer"></div></th>
+        <th class="resizable"><span>연락처</span><div class="resizer"></div></th>
+        <th class="resizable"><span>거래</span><div class="resizer"></div></th>
+        <th class="resizable"><span>확인</span><div class="resizer"></div></th>
+        <th class="resizable"><span>불발</span><div class="resizer"></div></th>
       </tr>
     </thead>
     <tbody>
@@ -93,12 +102,11 @@
         <td>4</td>
         <td>스피커 3대</td>
         <td>서울 강남구 역삼동 123</td>
-        <td class="resize-row">-</td>
+        <td>-</td>
         <td>010-1234-5678</td>
         <td><input type="checkbox" checked></td>
         <td><input type="checkbox"></td>
         <td><input type="checkbox"></td>
-        <td><button class="btn btn-sm btn-danger deleteRow">삭제</button></td>
       </tr>
     </tbody>
   </table>
@@ -107,15 +115,14 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// 번호 매기기
+let deleteMode = false;
+
 function updateRowNumbers() {
-  const rows = document.querySelectorAll("#dataTable tbody tr");
-  rows.forEach((row, idx) => {
+  document.querySelectorAll("#dataTable tbody tr").forEach((row, idx) => {
     row.querySelector("td").textContent = idx + 1;
   });
 }
 
-// 신규 등록
 document.getElementById("addRow").addEventListener("click", () => {
   const tbody = document.querySelector("#dataTable tbody");
   const newRow = document.createElement("tr");
@@ -150,28 +157,68 @@ document.getElementById("addRow").addEventListener("click", () => {
     <td><input type="number" class="form-control form-control-sm"></td>
     <td><input type="text" class="form-control form-control-sm"></td>
     <td><input type="text" class="form-control form-control-sm"></td>
-    <td class="resize-row"><textarea class="form-control form-control-sm" rows="1"></textarea></td>
+    <td><input type="text" class="form-control form-control-sm"></td>
     <td><input type="text" class="form-control form-control-sm"></td>
     <td><input type="checkbox"></td>
     <td><input type="checkbox"></td>
     <td><input type="checkbox"></td>
-    <td><button class="btn btn-sm btn-danger deleteRow">삭제</button></td>
   `;
   tbody.appendChild(newRow);
   updateRowNumbers();
 });
 
-// 삭제 기능
-document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("deleteRow")) {
-    const row = e.target.closest("tr");
-    row.remove();
-    updateRowNumbers();
-  }
+document.getElementById("deleteToggle").addEventListener("click", () => {
+  deleteMode = !deleteMode;
+
+  document.querySelectorAll("#dataTable tbody tr").forEach(row => {
+    if (deleteMode) {
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.classList.add("deleteCheck");
+      const td = document.createElement("td");
+      td.appendChild(cb);
+      row.prepend(td);
+    } else {
+      const cbCell = row.querySelector("td:first-child");
+      if (cbCell.querySelector(".deleteCheck")) {
+        if (cbCell.querySelector(".deleteCheck").checked) {
+          row.remove();
+        } else {
+          cbCell.remove();
+        }
+      }
+    }
+  });
+  if (!deleteMode) updateRowNumbers();
 });
 
 // 초기 번호
 updateRowNumbers();
+
+
+// 열 너비 조절
+document.querySelectorAll("th.resizable").forEach(th => {
+  const resizer = th.querySelector(".resizer");
+  let startX, startWidth;
+
+  resizer.addEventListener("mousedown", (e) => {
+    startX = e.pageX;
+    startWidth = th.offsetWidth;
+
+    const onMouseMove = (e) => {
+      const newWidth = startWidth + (e.pageX - startX);
+      th.style.width = newWidth + "px";
+    };
+
+    const onMouseUp = () => {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+  });
+});
 </script>
 
 </body>
