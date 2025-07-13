@@ -20,18 +20,13 @@ td, th {
 input, select, textarea {
   text-align: center;
 }
-
-/* 숨김 */
 #searchForm input,
 #searchForm select {
   display: none !important;
 }
-
 .action-buttons {
   gap: 0.5rem;
 }
-
-/* 모바일 */
 @media (max-width: 576px) {
   .action-buttons {
     flex-wrap: nowrap;
@@ -39,8 +34,8 @@ input, select, textarea {
     gap: 0.3rem;
   }
   .action-buttons .btn {
-    flex: 1 1 19%;
-    max-width: 19%;
+    flex: 1 1 18%;
+    max-width: 18%;
     min-width: 0;
     font-size: 0.75rem;
     padding: 0.3rem 0.2rem;
@@ -53,8 +48,8 @@ input, select, textarea {
 <body>
 <div class="container-fluid mt-2">
   <h2 class="text-center mb-4">
-  <img src="https://cdn.imweb.me/thumbnail/20250708/79f8dec48ec90.png" alt="아이콘" style="height:1em; vertical-align:middle; margin-right:0.3em;">
-  데이터베이스 관리 시스템
+    <img src="https://cdn.imweb.me/thumbnail/20250708/79f8dec48ec90.png" alt="아이콘" style="height:1em; vertical-align:middle; margin-right:0.3em;">
+    데이터베이스 관리 시스템
   </h2>
 
   <div class="row g-2 mb-3 justify-content-center">
@@ -97,6 +92,29 @@ input, select, textarea {
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<div class="modal fade" id="searchModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">검색</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="date" id="modalSearchDate" class="form-control mb-2" />
+        <select id="modalSearchRegion" class="form-select mb-2">
+          <option value="">지역</option>
+          <option>서울</option><option>부산</option><option>대구</option>
+        </select>
+        <input type="text" id="modalSearchText" placeholder="검색어" class="form-control mb-2" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="modalSearchBtn" class="btn btn-primary">검색</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -220,6 +238,46 @@ document.getElementById("deleteToggle").addEventListener("click", () => {
   });
   if (!deleteMode) updateRowNumbers();
 });
+
+document.getElementById("searchBtn").addEventListener("click", () => {
+  modal.show();
+});
+
+document.getElementById("modalSearchBtn").addEventListener("click", () => {
+  performSearch(
+    document.getElementById("modalSearchDate").value,
+    document.getElementById("modalSearchRegion").value,
+    document.getElementById("modalSearchText").value
+  );
+  modal.hide();
+});
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  document.querySelectorAll("#searchDate, #searchRegion, #searchText, #modalSearchDate, #modalSearchRegion, #modalSearchText").forEach(el => el.value = "");
+  document.querySelectorAll("#dataTable tbody tr").forEach(row => row.style.display = "");
+});
+
+function performSearch(dateVal, regionVal, textVal) {
+  textVal = textVal.trim().toLowerCase();
+  document.querySelectorAll("#dataTable tbody tr").forEach(row => {
+    let show = true;
+    const tds = row.querySelectorAll("td");
+
+    if (dateVal) {
+      const cellDate = tds[1].querySelector("input")?.value || tds[1].textContent.trim();
+      if (!cellDate.includes(dateVal)) show = false;
+    }
+    if (regionVal) {
+      const cellRegion = tds[2].querySelector("select")?.value || tds[2].textContent.trim();
+      if (cellRegion !== regionVal) show = false;
+    }
+    if (textVal) {
+      const rowText = row.textContent.toLowerCase();
+      if (!rowText.includes(textVal)) show = false;
+    }
+    row.style.display = show ? "" : "none";
+  });
+}
 
 updateRowNumbers();
 </script>
