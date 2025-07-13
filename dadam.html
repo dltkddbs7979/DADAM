@@ -35,11 +35,12 @@ input, select, textarea {
 @media (max-width: 576px) {
   .action-buttons {
     flex-wrap: nowrap;
-    gap: 0;
+    justify-content: space-between;
+    gap: 0.3rem;
   }
   .action-buttons .btn {
-    flex: 1 1 25%;
-    max-width: 25%;
+    flex: 1 1 23.5%;
+    max-width: 23.5%;
     min-width: 0;
     font-size: 0.8rem;
     padding: 0.3rem 0.2rem;
@@ -64,7 +65,7 @@ input, select, textarea {
     </div>
 
     <!-- 버튼 -->
-    <div class="col-12 col-lg-8 d-flex action-buttons flex-wrap justify-content-center justify-content-lg-end mt-2">
+    <div class="col-12 col-lg-8 d-flex action-buttons flex-wrap justify-content-center mt-2">
       <button id="searchBtn" class="btn btn-primary">검색</button>
       <button id="resetBtn" class="btn btn-secondary">초기화</button>
       <button id="addRow" class="btn btn-success">신규 등록</button>
