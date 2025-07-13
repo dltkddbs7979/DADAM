@@ -32,96 +32,64 @@ th.resizable .resizer {
   user-select: none;
   height: 100%;
 }
-
-/* 모바일 최적화 */
 @media (max-width: 576px) {
-  td, th {
-    font-size: 0.75rem;
-    padding: 0.3rem;
+  #searchForm input,
+  #searchForm select {
+    display: none !important;
   }
-  .btn, .form-control, .form-select {
-    width: 100% !important;
-    margin-bottom: 5px;
-    font-size: 0.85rem;
+  .action-buttons {
+    flex-wrap: nowrap;
+    gap: 2px;
   }
-  .table-responsive {
-    overflow-x: auto;
+  .action-buttons .btn {
+    flex: 1 1 25%;
+    font-size: 0.8rem;
+    padding: 0.3rem 0.2rem;
   }
 }
 </style>
 </head>
 <body>
 <div class="container-fluid mt-2">
-  <h2 class="text-center mb-5">다담 데이터베이스 관리 시스템</h2><br>
+  <h2 class="text-center mb-4">📋 데이터베이스 관리 시스템</h2>
 
-  <div class="row g-2 mb-3">
-    <div class="col-12 col-lg-8 d-flex flex-wrap gap-2">
-      <input type="date" id="searchDate" class="form-control w-auto flex-grow-1" />
-      <select id="searchRegion" class="form-select w-auto flex-grow-1">
+  <div class="row g-2 mb-3 justify-content-center">
+    <!-- PC 검색 폼 -->
+    <div id="searchForm" class="col-12 col-lg-8 d-flex flex-wrap gap-2 justify-content-center">
+      <input type="date" id="searchDate" class="form-control form-control-sm" />
+      <select id="searchRegion" class="form-select form-select-sm">
         <option value="">지역</option>
-        <option>서울</option>
-        <option>부산</option>
-        <option>대구</option>
-        <option>인천</option>
-        <option>광주</option>
-        <option>대전</option>
-        <option>울산</option>
-        <option>세종</option>
-        <option>수원</option>
-        <option>고양</option>
-        <option>성남</option>
-        <option>용인</option>
-        <option>창원</option>
-        <option>청주</option>
-        <option>전주</option>
-        <option>천안</option>
-        <option>안산</option>
-        <option>안양</option>
+        <option>서울</option><option>부산</option><option>대구</option>
       </select>
-      <input type="text" id="searchText" placeholder="검색" class="form-control w-auto flex-grow-1" />
-      <button id="searchBtn" class="btn btn-primary flex-shrink-0">검색</button>
-      <button id="resetBtn" class="btn btn-secondary flex-shrink-0">초기화</button>
+      <input type="text" id="searchText" placeholder="검색" class="form-control form-control-sm" />
     </div>
-    <div class="col-12 col-lg-4 d-flex flex-wrap gap-2 justify-content-lg-end mt-2 mt-lg-0">
-      <button id="addRow" class="btn btn-success">신규 등록</button>
-      <button id="deleteToggle" class="btn btn-danger">삭제</button>
+
+    <!-- 버튼 영역 -->
+    <div class="col-12 col-lg-8 d-flex action-buttons flex-wrap gap-2 justify-content-center mt-2">
+      <button id="searchBtn" class="btn btn-primary btn-sm">검색</button>
+      <button id="resetBtn" class="btn btn-secondary btn-sm">초기화</button>
+      <button id="addRow" class="btn btn-success btn-sm">신규 등록</button>
+      <button id="deleteToggle" class="btn btn-danger btn-sm">삭제</button>
     </div>
   </div>
 
+  <!-- 표 -->
   <div class="table-responsive">
     <table id="dataTable" class="table table-bordered table-hover">
       <thead class="table-light">
         <tr>
-          <th class="resizable"><span>#</span><div class="resizer"></div></th>
-          <th class="resizable"><span>운영일자</span><div class="resizer"></div></th>
-          <th class="resizable"><span>지역</span><div class="resizer"></div></th>
-          <th class="resizable"><span>업종</span><div class="resizer"></div></th>
-          <th class="resizable"><span>오픈예정</span><div class="resizer"></div></th>
-          <th class="resizable"><span>좌수</span><div class="resizer"></div></th>
-          <th class="resizable"><span>테이블 수</span><div class="resizer"></div></th>
-          <th class="resizable"><span>요청 장비</span><div class="resizer"></div></th>
-          <th class="resizable"><span>주소</span><div class="resizer"></div></th>
-          <th class="resizable"><span>내용</span><div class="resizer"></div></th>
-          <th class="resizable"><span>연락처</span><div class="resizer"></div></th>
-          <th class="resizable"><span>거래</span><div class="resizer"></div></th>
-          <th class="resizable"><span>확인</span><div class="resizer"></div></th>
-          <th class="resizable"><span>불발</span><div class="resizer"></div></th>
+          <th>#</th><th>운영일자</th><th>지역</th><th>업종</th>
+          <th>오픈예정</th><th>좌수</th><th>테이블 수</th>
+          <th>요청 장비</th><th>주소</th><th>내용</th><th>연락처</th>
+          <th>거래</th><th>확인</th><th>불발</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>1</td>
-          <td>2025-05-01</td>
-          <td>서울</td>
-          <td>카페</td>
-          <td>35</td>
-          <td>12</td>
-          <td>4</td>
-          <td>스피커 3대</td>
-          <td>서울 강남구 역삼동 123</td>
-          <td>-</td>
-          <td>010-1234-5678</td>
-          <td><input type="checkbox" checked></td>
+          <td>1</td><td>2025-05-01</td><td>서울</td><td>카페</td>
+          <td>35</td><td>12</td><td>4</td><td>스피커 3대</td>
+          <td>서울 강남구</td><td>-</td><td>010-1234-5678</td>
+          <td><input type="checkbox"></td>
           <td><input type="checkbox"></td>
           <td><input type="checkbox"></td>
         </tr>
@@ -130,9 +98,33 @@ th.resizable .resizer {
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- 모달 -->
+<div class="modal fade" id="searchModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">검색</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="date" id="modalSearchDate" class="form-control mb-2" />
+        <select id="modalSearchRegion" class="form-select mb-2">
+          <option value="">지역</option>
+          <option>서울</option><option>부산</option><option>대구</option>
+        </select>
+        <input type="text" id="modalSearchText" placeholder="검색어" class="form-control mb-2" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="modalSearchBtn" class="btn btn-primary">검색</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+const modal = new bootstrap.Modal(document.getElementById('searchModal'));
 let deleteMode = false;
 
 function updateRowNumbers() {
@@ -145,41 +137,11 @@ document.getElementById("addRow").addEventListener("click", () => {
   const tbody = document.querySelector("#dataTable tbody");
   const newRow = document.createElement("tr");
   newRow.innerHTML = `
-    <td></td>
-    <td><input type="date" class="form-control form-control-sm"></td>
-    <td>
-      <select class="form-select form-select-sm">
-        <option>서울</option>
-        <option>부산</option>
-        <option>대구</option>
-        <option>인천</option>
-        <option>광주</option>
-        <option>대전</option>
-        <option>울산</option>
-        <option>세종</option>
-        <option>수원</option>
-        <option>고양</option>
-        <option>성남</option>
-        <option>용인</option>
-        <option>창원</option>
-        <option>청주</option>
-        <option>전주</option>
-        <option>천안</option>
-        <option>안산</option>
-        <option>안양</option>
-      </select>
-    </td>
-    <td><input type="text" class="form-control form-control-sm"></td>
-    <td><input type="number" class="form-control form-control-sm"></td>
-    <td><input type="number" class="form-control form-control-sm"></td>
-    <td><input type="number" class="form-control form-control-sm"></td>
-    <td><input type="text" class="form-control form-control-sm"></td>
-    <td><input type="text" class="form-control form-control-sm"></td>
-    <td><input type="text" class="form-control form-control-sm"></td>
-    <td><input type="text" class="form-control form-control-sm"></td>
-    <td><input type="checkbox"></td>
-    <td><input type="checkbox"></td>
-    <td><input type="checkbox"></td>
+    <td></td><td><input type="date"></td>
+    <td><select><option>서울</option><option>부산</option><option>대구</option></select></td>
+    <td><input></td><td><input></td><td><input></td><td><input></td>
+    <td><input></td><td><input></td><td><input></td><td><input></td>
+    <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
   `;
   tbody.appendChild(newRow);
   updateRowNumbers();
@@ -187,7 +149,6 @@ document.getElementById("addRow").addEventListener("click", () => {
 
 document.getElementById("deleteToggle").addEventListener("click", () => {
   deleteMode = !deleteMode;
-
   document.querySelectorAll("#dataTable tbody tr").forEach(row => {
     if (deleteMode) {
       const cb = document.createElement("input");
@@ -212,36 +173,34 @@ document.getElementById("deleteToggle").addEventListener("click", () => {
 
 updateRowNumbers();
 
-// 열 너비 조절
-document.querySelectorAll("th.resizable").forEach(th => {
-  const resizer = th.querySelector(".resizer");
-  let startX, startWidth;
-
-  resizer.addEventListener("mousedown", (e) => {
-    startX = e.pageX;
-    startWidth = th.offsetWidth;
-
-    const onMouseMove = (e) => {
-      const newWidth = startWidth + (e.pageX - startX);
-      th.style.width = newWidth + "px";
-    };
-
-    const onMouseUp = () => {
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
-    };
-
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
-  });
+document.getElementById("searchBtn").addEventListener("click", () => {
+  if (window.innerWidth <= 576) {
+    modal.show();
+  } else {
+    performSearch(
+      document.getElementById("searchDate").value,
+      document.getElementById("searchRegion").value,
+      document.getElementById("searchText").value
+    );
+  }
 });
 
-// 검색
-document.getElementById("searchBtn").addEventListener("click", () => {
-  const dateVal = document.getElementById("searchDate").value;
-  const regionVal = document.getElementById("searchRegion").value;
-  const textVal = document.getElementById("searchText").value.trim().toLowerCase();
+document.getElementById("modalSearchBtn").addEventListener("click", () => {
+  performSearch(
+    document.getElementById("modalSearchDate").value,
+    document.getElementById("modalSearchRegion").value,
+    document.getElementById("modalSearchText").value
+  );
+  modal.hide();
+});
 
+document.getElementById("resetBtn").addEventListener("click", () => {
+  document.querySelectorAll("#searchDate, #searchRegion, #searchText, #modalSearchDate, #modalSearchRegion, #modalSearchText").forEach(el => el.value = "");
+  document.querySelectorAll("#dataTable tbody tr").forEach(row => row.style.display = "");
+});
+
+function performSearch(dateVal, regionVal, textVal) {
+  textVal = textVal.trim().toLowerCase();
   document.querySelectorAll("#dataTable tbody tr").forEach(row => {
     let show = true;
     const tds = row.querySelectorAll("td");
@@ -250,32 +209,17 @@ document.getElementById("searchBtn").addEventListener("click", () => {
       const cellDate = tds[1].querySelector("input")?.value || tds[1].textContent.trim();
       if (!cellDate.includes(dateVal)) show = false;
     }
-
     if (regionVal) {
       const cellRegion = tds[2].querySelector("select")?.value || tds[2].textContent.trim();
       if (cellRegion !== regionVal) show = false;
     }
-
     if (textVal) {
       const rowText = row.textContent.toLowerCase();
       if (!rowText.includes(textVal)) show = false;
     }
-
     row.style.display = show ? "" : "none";
   });
-});
-
-// 초기화
-document.getElementById("resetBtn").addEventListener("click", () => {
-  document.getElementById("searchDate").value = "";
-  document.getElementById("searchRegion").value = "";
-  document.getElementById("searchText").value = "";
-
-  document.querySelectorAll("#dataTable tbody tr").forEach(row => {
-    row.style.display = "";
-  });
-});
+}
 </script>
-
 </body>
 </html>
