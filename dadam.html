@@ -33,22 +33,17 @@ th.resizable .resizer {
   height: 100%;
 }
 
-/* PC (기본) */
-.btn, .form-control, .form-select {
-  font-size: 1rem;
-  padding: 0.5rem 0.75rem;
-  min-width: 80px;
+/* 입력칸은 항상 숨김 */
+#searchForm input,
+#searchForm select {
+  display: none !important;
 }
+
 .action-buttons {
   gap: 0.5rem;
 }
 
-/* 모바일 */
 @media (max-width: 576px) {
-  #searchForm input,
-  #searchForm select {
-    display: none !important;
-  }
   .action-buttons {
     flex-wrap: nowrap;
     gap: 2px;
@@ -56,7 +51,7 @@ th.resizable .resizer {
   .action-buttons .btn {
     flex: 1 1 25%;
     font-size: 0.8rem;
-    padding: 0.25rem 0.2rem;
+    padding: 0.3rem 0.2rem;
   }
 }
 </style>
@@ -66,7 +61,7 @@ th.resizable .resizer {
   <h2 class="text-center mb-4">📋 데이터베이스 관리 시스템</h2>
 
   <div class="row g-2 mb-3 justify-content-center">
-    <!-- PC 검색 폼 -->
+    <!-- PC/모바일 모두 숨겨진 검색 폼 -->
     <div id="searchForm" class="col-12 col-lg-8 d-flex flex-wrap gap-2 justify-content-center">
       <input type="date" id="searchDate" class="form-control" />
       <select id="searchRegion" class="form-select">
@@ -186,15 +181,7 @@ document.getElementById("deleteToggle").addEventListener("click", () => {
 updateRowNumbers();
 
 document.getElementById("searchBtn").addEventListener("click", () => {
-  if (window.innerWidth <= 576) {
-    modal.show();
-  } else {
-    performSearch(
-      document.getElementById("searchDate").value,
-      document.getElementById("searchRegion").value,
-      document.getElementById("searchText").value
-    );
-  }
+  modal.show();
 });
 
 document.getElementById("modalSearchBtn").addEventListener("click", () => {
