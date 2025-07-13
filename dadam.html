@@ -13,11 +13,26 @@
   <div class="d-flex justify-content-between align-items-center my-3">
     <div>
       <input type="date" class="form-control d-inline w-auto" />
-      <select class="form-select d-inline w-auto">
+      <select id="regionFilter" class="form-select d-inline w-auto">
         <option selected>지역</option>
         <option>서울</option>
         <option>부산</option>
         <option>대구</option>
+        <option>인천</option>
+        <option>광주</option>
+        <option>대전</option>
+        <option>울산</option>
+        <option>세종</option>
+        <option>수원</option>
+        <option>고양</option>
+        <option>성남</option>
+        <option>용인</option>
+        <option>창원</option>
+        <option>청주</option>
+        <option>전주</option>
+        <option>천안</option>
+        <option>안산</option>
+        <option>안양</option>
       </select>
       <select class="form-select d-inline w-auto">
         <option selected>업종</option>
@@ -29,16 +44,16 @@
       <button class="btn btn-primary">검색</button>
     </div>
     <div>
-      <button class="btn btn-success">신규 등록</button>
+      <button id="addRow" class="btn btn-success">신규 등록</button>
       <button class="btn btn-outline-primary">엑셀 다운로드</button>
       <button class="btn btn-outline-secondary">엑셀 업로드</button>
     </div>
   </div>
 
-  <table class="table table-bordered table-hover">
+  <table id="dataTable" class="table table-bordered table-hover">
     <thead class="table-light">
       <tr>
-        <th>#</th> <!-- 번호 열 추가 -->
+        <th>#</th>
         <th>운영일자</th>
         <th>지역</th>
         <th>업종</th>
@@ -56,7 +71,7 @@
     </thead>
     <tbody>
       <tr>
-        <td>1</td> <!-- 번호 -->
+        <td>1</td>
         <td>2025-05-01</td>
         <td>서울</td>
         <td>카페</td>
@@ -72,7 +87,7 @@
         <td><input type="checkbox"></td>
       </tr>
       <tr>
-        <td>2</td> <!-- 번호 -->
+        <td>2</td>
         <td>2025-05-02</td>
         <td>부산</td>
         <td>음식점</td>
@@ -92,5 +107,64 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// 테이블 번호 자동 매기기
+function updateRowNumbers() {
+  const rows = document.querySelectorAll("#dataTable tbody tr");
+  rows.forEach((row, idx) => {
+    row.querySelector("td").textContent = idx + 1;
+  });
+}
+
+// 신규등록 기능
+document.getElementById("addRow").addEventListener("click", () => {
+  const tbody = document.querySelector("#dataTable tbody");
+  const newRow = document.createElement("tr");
+  newRow.innerHTML = `
+    <td></td>
+    <td><input type="date" class="form-control form-control-sm"></td>
+    <td>
+      <select class="form-select form-select-sm">
+        <option>서울</option>
+        <option>부산</option>
+        <option>대구</option>
+        <option>인천</option>
+        <option>광주</option>
+        <option>대전</option>
+        <option>울산</option>
+        <option>세종</option>
+        <option>수원</option>
+        <option>고양</option>
+        <option>성남</option>
+        <option>용인</option>
+        <option>창원</option>
+        <option>청주</option>
+        <option>전주</option>
+        <option>천안</option>
+        <option>안산</option>
+        <option>안양</option>
+      </select>
+    </td>
+    <td><input type="text" class="form-control form-control-sm"></td>
+    <td><input type="number" class="form-control form-control-sm"></td>
+    <td><input type="number" class="form-control form-control-sm"></td>
+    <td><input type="number" class="form-control form-control-sm"></td>
+    <td><input type="text" class="form-control form-control-sm"></td>
+    <td><input type="text" class="form-control form-control-sm"></td>
+    <td><input type="text" class="form-control form-control-sm"></td>
+    <td><input type="text" class="form-control form-control-sm"></td>
+    <td><input type="checkbox"></td>
+    <td><input type="checkbox"></td>
+    <td><input type="checkbox"></td>
+  `;
+  tbody.appendChild(newRow);
+  updateRowNumbers();
+});
+
+// 페이지 로드시 번호 초기화
+updateRowNumbers();
+</script>
+
 </body>
 </html>
