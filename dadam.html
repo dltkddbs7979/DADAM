@@ -39,10 +39,10 @@ input, select, textarea {
     gap: 0.3rem;
   }
   .action-buttons .btn {
-    flex: 1 1 23.5%;
-    max-width: 23.5%;
+    flex: 1 1 19%;
+    max-width: 19%;
     min-width: 0;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     padding: 0.3rem 0.2rem;
     margin: 0;
     box-sizing: border-box;
@@ -55,8 +55,7 @@ input, select, textarea {
   <h2 class="text-center mb-4">
   <img src="https://cdn.imweb.me/thumbnail/20250708/79f8dec48ec90.png" alt="아이콘" style="height:1em; vertical-align:middle; margin-right:0.3em;">
   데이터베이스 관리 시스템
-</h2>
-
+  </h2>
 
   <div class="row g-2 mb-3 justify-content-center">
     <div id="searchForm" class="col-12 col-lg-8 d-flex flex-wrap gap-2 justify-content-center">
@@ -68,11 +67,11 @@ input, select, textarea {
       <input type="text" id="searchText" placeholder="검색" class="form-control" />
     </div>
 
-    <!-- 버튼 -->
     <div class="col-12 col-lg-8 d-flex action-buttons flex-wrap justify-content-center mt-2">
       <button id="searchBtn" class="btn btn-primary">검색</button>
       <button id="resetBtn" class="btn btn-secondary">초기화</button>
       <button id="addRow" class="btn btn-success">신규 등록</button>
+      <button id="editToggle" class="btn btn-warning">수정</button>
       <button id="deleteToggle" class="btn btn-danger">삭제</button>
     </div>
   </div>
@@ -101,33 +100,12 @@ input, select, textarea {
   </div>
 </div>
 
-<div class="modal fade" id="searchModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">검색</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <input type="date" id="modalSearchDate" class="form-control mb-2" />
-        <select id="modalSearchRegion" class="form-select mb-2">
-          <option value="">지역</option>
-          <option>서울</option><option>부산</option><option>대구</option>
-        </select>
-        <input type="text" id="modalSearchText" placeholder="검색어" class="form-control mb-2" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="modalSearchBtn" class="btn btn-primary">검색</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 const modal = new bootstrap.Modal(document.getElementById('searchModal'));
 let deleteMode = false;
+let addMode = false;
+let editMode = false;
 
 function updateRowNumbers() {
   document.querySelectorAll("#dataTable tbody tr").forEach((row, idx) => {
@@ -137,16 +115,86 @@ function updateRowNumbers() {
 
 document.getElementById("addRow").addEventListener("click", () => {
   const tbody = document.querySelector("#dataTable tbody");
-  const newRow = document.createElement("tr");
-  newRow.innerHTML = `
-    <td></td><td><input type="date"></td>
-    <td><select><option>서울</option><option>부산</option><option>대구</option></select></td>
-    <td><input></td><td><input></td><td><input></td><td><input></td>
-    <td><input></td><td><input></td><td><input></td><td><input></td>
-    <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-  `;
-  tbody.appendChild(newRow);
-  updateRowNumbers();
+
+  if (!addMode) {
+    const newRow = document.createElement("tr");
+    newRow.classList.add("new-entry");
+    newRow.innerHTML = `
+      <td></td><td><input type="date"></td>
+      <td><select><option>서울</option><option>부산</option><option>대구</option></select></td>
+      <td><input></td><td><input></td><td><input></td><td><input></td>
+      <td><input></td><td><input></td><td><input></td><td><input></td>
+      <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
+    `;
+    tbody.appendChild(newRow);
+    updateRowNumbers();
+    addMode = true;
+
+  } else {
+    const newRows = tbody.querySelectorAll("tr.new-entry");
+    newRows.forEach(row => {
+      const tds = row.querySelectorAll("td");
+      for (let i = 1; i < tds.length; i++) {
+        const cell = tds[i];
+        const input = cell.querySelector("input, select");
+        if (input) {
+          if (input.type === "checkbox") {
+            const checked = input.checked;
+            cell.innerHTML = `<input type="checkbox" ${checked ? "checked" : ""}>`;
+          } else {
+            cell.textContent = input.value;
+          }
+        }
+      }
+      row.classList.remove("new-entry");
+    });
+    updateRowNumbers();
+    addMode = false;
+  }
+});
+
+document.getElementById("editToggle").addEventListener("click", () => {
+  const tbody = document.querySelector("#dataTable tbody");
+
+  if (!editMode) {
+    tbody.querySelectorAll("tr").forEach(row => {
+      const tds = row.querySelectorAll("td");
+      for (let i = 1; i < tds.length; i++) {
+        const text = tds[i].textContent.trim();
+        if (tds[i].querySelector("input[type=checkbox]")) continue;
+
+        if (i === 1) {
+          tds[i].innerHTML = `<input type="date" value="${text}">`;
+        } else if (i === 2) {
+          tds[i].innerHTML = `
+            <select>
+              <option ${text==='서울'?'selected':''}>서울</option>
+              <option ${text==='부산'?'selected':''}>부산</option>
+              <option ${text==='대구'?'selected':''}>대구</option>
+            </select>`;
+        } else {
+          tds[i].innerHTML = `<input value="${text}">`;
+        }
+      }
+    });
+    editMode = true;
+  } else {
+    tbody.querySelectorAll("tr").forEach(row => {
+      const tds = row.querySelectorAll("td");
+      for (let i = 1; i < tds.length; i++) {
+        const input = tds[i].querySelector("input, select");
+        if (input) {
+          if (input.type === "checkbox") {
+            const checked = input.checked;
+            tds[i].innerHTML = `<input type="checkbox" ${checked ? "checked" : ""}>`;
+          } else {
+            tds[i].textContent = input.value;
+          }
+        }
+      }
+    });
+    editMode = false;
+  }
 });
 
 document.getElementById("deleteToggle").addEventListener("click", () => {
@@ -174,46 +222,6 @@ document.getElementById("deleteToggle").addEventListener("click", () => {
 });
 
 updateRowNumbers();
-
-document.getElementById("searchBtn").addEventListener("click", () => {
-  modal.show();
-});
-
-document.getElementById("modalSearchBtn").addEventListener("click", () => {
-  performSearch(
-    document.getElementById("modalSearchDate").value,
-    document.getElementById("modalSearchRegion").value,
-    document.getElementById("modalSearchText").value
-  );
-  modal.hide();
-});
-
-document.getElementById("resetBtn").addEventListener("click", () => {
-  document.querySelectorAll("#searchDate, #searchRegion, #searchText, #modalSearchDate, #modalSearchRegion, #modalSearchText").forEach(el => el.value = "");
-  document.querySelectorAll("#dataTable tbody tr").forEach(row => row.style.display = "");
-});
-
-function performSearch(dateVal, regionVal, textVal) {
-  textVal = textVal.trim().toLowerCase();
-  document.querySelectorAll("#dataTable tbody tr").forEach(row => {
-    let show = true;
-    const tds = row.querySelectorAll("td");
-
-    if (dateVal) {
-      const cellDate = tds[1].querySelector("input")?.value || tds[1].textContent.trim();
-      if (!cellDate.includes(dateVal)) show = false;
-    }
-    if (regionVal) {
-      const cellRegion = tds[2].querySelector("select")?.value || tds[2].textContent.trim();
-      if (cellRegion !== regionVal) show = false;
-    }
-    if (textVal) {
-      const rowText = row.textContent.toLowerCase();
-      if (!rowText.includes(textVal)) show = false;
-    }
-    row.style.display = show ? "" : "none";
-  });
-}
 </script>
 </body>
 </html>
